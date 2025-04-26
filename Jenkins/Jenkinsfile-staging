@@ -120,6 +120,13 @@ pipeline {
     }
         
     stages {
+        stage('check') {
+           steps {
+                script {
+                        bat"echo 'ok'"
+                }
+           }
+        }
         stage('test') {
             when {
                 expression {
@@ -128,7 +135,7 @@ pipeline {
             }
             steps {
                 script {
-                    echo "test"
+                    bat "echo 'test'"
                 }
             }
         }
