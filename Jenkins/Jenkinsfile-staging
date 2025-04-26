@@ -121,9 +121,17 @@ pipeline {
         
     stages {
         stage('check') {
-           steps {
+           when {
+                not {
+                        expression {
+                               return env.GIT_BRANCH?.startsWith('origin/tags/') || env.GIT_BRANCH?.startsWith('refs/tags/') 
+                        }
+                }
+           }
+           step {
                 script {
-                        bat"echo 'ok'"
+                        currentBuild.result = 'ABORTED'
+                        return
                 }
            }
         }
