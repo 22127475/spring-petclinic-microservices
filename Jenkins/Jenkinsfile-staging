@@ -129,9 +129,38 @@ pipeline {
         }
         stage('test') {
             when {
-                expression {
-                    return env.GIT_BRANCH?.startsWith('origin/tags/')
+                pipeline {
+    agent any
+
+    environment {
+        DOCKERHUB_CREDENTIALS_ID = 'Docker_Jenkins_CD'
+        DOCKER_REGISTRY = '22127475'
+        HELM_DIR = 'helm_chart'
+        namespace = 'staging'
+        DOMAIN = 'staging.com'
+        IMAGE_NAME = '22127475/spring-petclinic'
+    }
+        
+    stages {
+        stage('check') {
+           steps {
+                script {
+                        bat"echo 'ok'"
                 }
+           }
+        }
+        stage('test') {
+            when {
+                buldingTag()
+            }
+            steps {
+                script {
+                    bat "echo 'test'"
+                }
+            }
+        }
+    }
+}
             }
             steps {
                 script {
