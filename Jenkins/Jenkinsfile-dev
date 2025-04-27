@@ -7,6 +7,8 @@ pipeline {
         HELM_DIR = 'helm_chart'
         namespace = "dev"
         DOMAIN = "dev.com"    
+        DOCKERHUB_CREDENTIALS_ID = 'Docker_Jenkins_CD'
+        DOCKER_REGISTRY        = '22127475'
     }
 
     stages {
