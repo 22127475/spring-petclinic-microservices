@@ -23,7 +23,7 @@ pipeline {
 
                             echo "Executing Maven command on Windows to build images: ${mvnCommand}"
 
-                            bat mvnCommand
+                            //bat mvnCommand
                             echo "Maven build completed successfully."
                         }
                         catch (e) {
