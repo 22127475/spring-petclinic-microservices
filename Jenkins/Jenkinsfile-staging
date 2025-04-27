@@ -121,54 +121,14 @@ pipeline {
         
     stages {
         stage('check') {
-           when {
-                not {
-                        expression {
-                               return env.GIT_BRANCH?.startsWith('origin/tags/') || env.GIT_BRANCH?.startsWith('refs/tags/') 
-                        }
-                }
-           }
-           step {
-                script {
-                        currentBuild.result = 'ABORTED'
-                        return
-                }
-           }
+            GIT_REF = bat(script: 'git name-rev --name-only HEAD', returnStdout: true).trim()
+            echo "GIT_REF = ${GIT_REF}"
         }
         stage('test') {
             when {
-                pipeline {
-    agent any
-
-    environment {
-        DOCKERHUB_CREDENTIALS_ID = 'Docker_Jenkins_CD'
-        DOCKER_REGISTRY = '22127475'
-        HELM_DIR = 'helm_chart'
-        namespace = 'staging'
-        DOMAIN = 'staging.com'
-        IMAGE_NAME = '22127475/spring-petclinic'
-    }
-        
-    stages {
-        stage('check') {
-           steps {
-                script {
-                        bat"echo 'ok'"
+                expression {
+                    return GIT_REF.startsWith('tags/')
                 }
-           }
-        }
-        stage('test') {
-            when {
-                buldingTag()
-            }
-            steps {
-                script {
-                    bat "echo 'test'"
-                }
-            }
-        }
-    }
-}
             }
             steps {
                 script {
