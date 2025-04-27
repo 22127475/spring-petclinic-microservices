@@ -123,8 +123,10 @@ pipeline {
         stage('check') {
             steps {
                 script {
-                    GIT_REF = bat(script: 'git describe --tags --exact-match HEAD', returnStdout: true).trim()
-                    echo "GIT_REF = ${GIT_REF}"
+                    GIT_REF = bat(script: 'git name-rev --name-only HEAD', returnStdout: true).trim()
+                    def lines = GIT_REF.split('\r?\n')
+                    LATEST_GIT_REF = lines[lines.size() - 1]
+                    echo "GIT_REF = ${LATEST_GIT_REF}"
                 }
             }
         }
@@ -132,7 +134,7 @@ pipeline {
         stage('test') {
             when {
                 expression {
-                    return GIT_REF.startsWith('tags/')
+                    return LATEST_GIT_REF.startsWith('tags/')
                 }
             }
             steps {
