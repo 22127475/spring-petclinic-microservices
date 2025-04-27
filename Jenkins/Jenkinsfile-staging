@@ -118,12 +118,17 @@ pipeline {
         DOMAIN = 'staging.com'
         IMAGE_NAME = '22127475/spring-petclinic'
     }
-        
+
     stages {
         stage('check') {
-            GIT_REF = bat(script: 'git name-rev --name-only HEAD', returnStdout: true).trim()
-            echo "GIT_REF = ${GIT_REF}"
+            steps {
+                script {
+                    GIT_REF = bat(script: 'git name-rev --name-only HEAD', returnStdout: true).trim()
+                    echo "GIT_REF = ${GIT_REF}"
+                }
+            }
         }
+
         stage('test') {
             when {
                 expression {
@@ -138,3 +143,4 @@ pipeline {
         }
     }
 }
+
