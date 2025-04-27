@@ -123,7 +123,7 @@ pipeline {
         stage('check') {
             steps {
                 script {
-                    GIT_REF = bat(script: 'git name-rev --name-only HEAD', returnStdout: true).trim()
+                    GIT_REF = bat(script: 'git describe --tags --exact-match HEAD', returnStdout: true).trim()
                     echo "GIT_REF = ${GIT_REF}"
                 }
             }
